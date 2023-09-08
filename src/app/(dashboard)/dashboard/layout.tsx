@@ -8,9 +8,16 @@ import Image from 'next/image'
 import SignOutButton from '@/components/SignOutButton'
 import FriendRequestSidebarOptions from '@/components/FriendRequestSidebarOptions'
 import { fetchRedis } from '@/helpers/redis'
+import { getFriendsByUserId } from '@/helpers/get-friends-by-user-id'
+import SidebarChatList from '@/components/SidebarChatList'
 
 interface LayoutProps {
   children: ReactNode
+}
+
+export const metadata = {
+  title: 'friends | hello world',
+  description: 'hello world',
 }
 
 interface SidebarOption {
@@ -33,6 +40,8 @@ const Layout = async ({ children }: LayoutProps) => {
   const session = await getServerSession(authOptions)
   if (!session) notFound()
 
+  const friends = await getFriendsByUserId(session.user.id)
+
   const unseenRequestCount = (
     (await fetchRedis(
       'smembers',
@@ -47,14 +56,17 @@ const Layout = async ({ children }: LayoutProps) => {
           <Icons.Logo className='h-8 w-auto text-indigo-600' />
         </Link>
 
+        
+        {friends.length > 0 ? (
         <div className='text-xs font-semibold leading-6 text-gray-400'>
           Messages
         </div>
+        ) : null}
 
         <nav className='flex flex-1 flex-col'>
           <ul role='list' className='flex flex-1 flex-col gap-y-7'>
             <li>
-              Baby: meow miss you
+              <SidebarChatList friends={friends} sessionId={session.user.id} />
             </li>
             <li>
               <div className='text-xs font-semibold leading-6 text-gray-400'>
@@ -77,13 +89,21 @@ const Layout = async ({ children }: LayoutProps) => {
                     </li>
                   )
                 })}
+
+                <li>
+                  <FriendRequestSidebarOptions
+                    sessionId={session.user.id}
+
+                    initialUnseenRequestCount={unseenRequestCount}
+                  />
+                </li>
               </ul>
             </li>
 
             <li className='-mx-6 mt-auto flex items-center'>
               <div className='flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900'>
                 <div className='relative h-8 w-8 bg-gray-50'>
-                <Image
+                  <Image
                     fill
                     referrerPolicy='no-referrer'
                     className='rounded-full'
@@ -101,24 +121,15 @@ const Layout = async ({ children }: LayoutProps) => {
                 </div>
               </div>
               <SignOutButton className='h-full aspect-square' />
-
-
             </li>
-
-            <li>
-                  <FriendRequestSidebarOptions
-                    sessionId={session.user.id}
-
-                    initialUnseenRequestCount={unseenRequestCount}
-                  />
-                </li>
-
-
 
           </ul>
         </nav>
       </div>
-      {children}
+
+      <aside className='max-h-screen container py-16 md:py-12 w-full'>
+        {children}
+      </aside>
     </div>
   )
 
