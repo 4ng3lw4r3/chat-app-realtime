@@ -1,5 +1,5 @@
 import { authOptions } from '@/lib/auth'
-import { FC, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -10,6 +10,7 @@ import FriendRequestSidebarOptions from '@/components/FriendRequestSidebarOption
 import { fetchRedis } from '@/helpers/redis'
 import { getFriendsByUserId } from '@/helpers/get-friends-by-user-id'
 import SidebarChatList from '@/components/SidebarChatList'
+import React from 'react'
 
 interface LayoutProps {
   children: ReactNode

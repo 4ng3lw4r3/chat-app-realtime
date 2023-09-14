@@ -8,6 +8,13 @@ const config: Config = {
     "./src/**/*.{html,js,jsx, tsx}"
   ],
   theme: {
+    container: {
+      center: true,
+      padding: '1.5rem',
+      screens: {
+        '2xl': '1360px'
+      },
+    },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

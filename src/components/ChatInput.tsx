@@ -5,6 +5,8 @@ import { FC, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import TextareaAutosize from 'react-textarea-autosize'
 import Button from './ui/Button'
+import React from 'react';
+
 
 interface ChatInputProps {
   chatPartner: User

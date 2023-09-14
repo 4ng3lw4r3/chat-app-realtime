@@ -5,6 +5,8 @@ import Button from './ui/Button'
 import { signOut } from 'next-auth/react'
 import { toast } from 'react-hot-toast'
 import { Loader2, LogOut } from 'lucide-react'
+import React from 'react'
+
 
 interface SignOutButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> { }
 
